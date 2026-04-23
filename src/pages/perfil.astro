@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/layout.astro';
+import ProfileView from '../components/ProfileView';
+import Header from '@/components/Header.astro';
+
+const token = Astro.cookies.get('auth_token');
+if (!token?.value) {
+  return Astro.redirect('/auth');
+}
+---
+
+<Layout
+  title="Mi Perfil | Season Harvest"
+  contenido="Gestiona tu perfil en Season Harvest."
+  nameContent="description"
+>
+  <Header showImg={false} />
+  <ProfileView client:load />
+</Layout>

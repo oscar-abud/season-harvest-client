@@ -97,7 +97,7 @@ export default function AuthForm() {
         return;
       }
 
-      setAuth(data.user, data.token);
+      setAuth(data.user);
       setSuccess(
         mode === 'login'
           ? '¡Sesión iniciada! Redirigiendo...'
