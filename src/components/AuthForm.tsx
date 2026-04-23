@@ -1,4 +1,5 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
+import { useClientStore } from '@/store/client.store';
 
 type Mode = 'login' | 'register';
 
@@ -29,6 +30,7 @@ function getMaxBirthdate(): string {
 }
 
 export default function AuthForm() {
+  const setAuth = useClientStore(s => s.setAuth);
   const [mode, setMode] = useState<Mode>('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -95,6 +97,7 @@ export default function AuthForm() {
         return;
       }
 
+      setAuth(data.user, data.token);
       setSuccess(
         mode === 'login'
           ? '¡Sesión iniciada! Redirigiendo...'
