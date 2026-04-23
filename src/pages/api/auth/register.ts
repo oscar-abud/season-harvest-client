@@ -1,8 +1,8 @@
 import type { APIRoute } from 'astro';
 import { CONST_ENDPOINT_CLIENTES_REGISTER } from '@/services/constats';
 
-// const API_URL = import.meta.env.API_URL;
-const API_URL = 'http://localhost:8080';
+const API_URL = import.meta.env.API_URL;
+// const API_URL = 'http://localhost:8080';
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
