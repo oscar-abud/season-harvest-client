@@ -13,6 +13,7 @@ export interface IClient {
   email: string;
   password: string;
   birthdate: string;
+  phone?: number;
   authProvider: string;
   carts: ICart[];
   createdAt: string;
