@@ -35,9 +35,10 @@ header {
 
 nav {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 20px 20%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20%;
     height: 70px;
     position: sticky;
     top: -0.1%;
@@ -46,16 +47,43 @@ nav {
     position: relative;
 }
 
+.check-btn {
+    display: none;
+}
+
 nav ul {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
+    gap: 0.25rem 1.75rem;
+    flex: 1;
     font-size: 1.65em;
 }
 
 nav ul {
-    padding: 5px 5%;
+    padding: 5px 0;
+}
+
+.nav-login-btn {
+    display: inline-block;
+    padding: 0.45rem 1.1rem;
+    background-color: var(--white-color);
+    color: var(--green-color);
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: 2px solid var(--white-color);
+    transition: background-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.nav-login-btn:hover {
+    background-color: transparent;
+    color: var(--white-color);
 }
 
 nav ul li {
@@ -113,7 +141,7 @@ label {
 @media (max-width: 30000px) {
 
     nav {
-        padding: 20px 20%;
+        padding: 0 20%;
         position: sticky;
         top: 0;
     }
@@ -124,7 +152,7 @@ label {
 @media (max-width: 1024px) {
 
     nav {
-        padding: 20px 10%;
+        padding: 0 10%;
         position: sticky;
         top: 0;
     }
@@ -134,15 +162,23 @@ label {
 @media (max-width: 768px) {
 
     nav {
-        display: flex;
-        flex-direction: column;
-        z-index: 5;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4%;
         height: 10vh;
         background-color: var(--green-color);
     }
 
+    .check-btn {
+        display: flex;
+        align-items: center;
+        order: 1;
+        width: auto;
+    }
+
     .hamburger-menu {
-        display: block;
+        display: flex;
     }
 
     .menu {
@@ -159,6 +195,15 @@ label {
         transition: ease-in-out .3s;
         border-top: solid 2px var(--white-color);
         border-bottom: solid 2px var(--cream-color);
+        order: 3;
+        flex: none;
+    }
+
+    .nav-login-btn {
+        order: 2;
+        flex-shrink: 0;
+        font-size: 0.72rem;
+        padding: 0.38rem 0.9rem;
     }
 
     nav ul li a {

@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/layout.astro';
+import AuthForm from '../components/AuthForm';
+
+const token = Astro.cookies.get('auth_token');
+if (token?.value) {
+  return Astro.redirect('/clientes');
+}
+---
+
+<Layout
+  title="Iniciar Sesión | Season Harvest"
+  contenido="Accede a tu cuenta de Season Harvest o crea una nueva."
+  nameContent="description"
+>
+  <AuthForm client:load />
+</Layout>
