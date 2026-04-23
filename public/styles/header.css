@@ -163,6 +163,142 @@ nav ul.menu li a:hover {
 
 
 /* ========================
+   Nav User Menu (dropdown)
+   ======================== */
+
+.nav-user {
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* Skeleton placeholder antes de hidratar */
+.nav-user-skeleton {
+    width: 120px;
+    height: 36px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* Botón trigger */
+.nav-user-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    padding: 0.38rem 0.85rem;
+    border-radius: 50px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    font-family: sans-serif;
+}
+
+.nav-user-trigger:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.75);
+}
+
+/* Nombre del usuario */
+.nav-user-name {
+    color: var(--white-color);
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Chevron animado */
+.nav-user-chevron {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.65rem;
+    transition: transform 0.22s ease;
+    flex-shrink: 0;
+}
+
+.nav-user-chevron.open {
+    transform: rotate(180deg);
+}
+
+/* Dropdown — portal en body, position:fixed para escapar de cualquier stacking context */
+.nav-user-dropdown {
+    position: fixed;
+    background: var(--white-color);
+    border-radius: 12px;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.13),
+        0 2px 8px rgba(0, 0, 0, 0.06);
+    min-width: 190px;
+    overflow: hidden;
+    z-index: 99999;
+    animation: dropdown-in 0.18s ease;
+}
+
+@keyframes dropdown-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* Opciones del dropdown */
+.nav-user-option {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.75rem 1.1rem;
+    text-decoration: none;
+    font-size: 0.84rem;
+    font-weight: 500;
+    color: var(--dark-color);
+    transition: background-color 0.15s ease, color 0.15s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.nav-user-option:hover {
+    background-color: rgba(13, 90, 72, 0.06);
+    color: var(--green-color);
+}
+
+.nav-user-option-icon {
+    width: 14px;
+    color: #999;
+    flex-shrink: 0;
+    transition: color 0.15s ease;
+}
+
+.nav-user-option:hover .nav-user-option-icon {
+    color: var(--green-color);
+}
+
+/* Opción Cerrar Sesión */
+.nav-user-option--logout {
+    color: #c0392b;
+}
+
+.nav-user-option--logout:hover {
+    background-color: rgba(220, 38, 38, 0.06);
+    color: #c0392b;
+}
+
+.nav-user-option--logout .nav-user-option-icon {
+    color: #e57373;
+}
+
+.nav-user-option--logout:hover .nav-user-option-icon {
+    color: #c0392b;
+}
+
+/* Separador */
+.nav-user-separator {
+    height: 1px;
+    background: #f0f0f0;
+    margin: 2px 0;
+}
+
+
+/* ========================
    Responsive — tablet (≤ 1024px)
    ======================== */
 
@@ -226,6 +362,22 @@ nav ul.menu li a:hover {
         order: 2;
         font-size: 0.72rem;
         padding: 0.38rem 0.85rem;
+    }
+
+    /* User menu en móvil */
+    .nav-user-trigger {
+        order: 2;
+        padding: 0.3rem 0.65rem;
+    }
+
+    .nav-user-name {
+        max-width: 90px;
+        font-size: 0.72rem;
+    }
+
+    .nav-user-skeleton {
+        width: 80px;
+        order: 2;
     }
 
     /* Abrir menú al marcar el checkbox */

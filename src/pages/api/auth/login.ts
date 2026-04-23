@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       maxAge: 60 * 60 * 24 * 7, // 7 días
     });
 
-    return Response.json({ success: true, redirect: '/clientes' });
+    return Response.json({ success: true, redirect: '/clientes', user: data.user });
   } catch {
     return Response.json(
       { message: 'Error interno del servidor.' },
