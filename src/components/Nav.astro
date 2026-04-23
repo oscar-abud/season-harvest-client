@@ -1,5 +1,8 @@
+---
+const isLoggedIn = !!Astro.cookies.get('auth_token')?.value;
+---
+
 <nav>
-    <!-- boton para menu -->
     <input type="checkbox" id="check" />
     <label for="check" class="check-btn">
         <div class="hamburger-menu" id="hamburger-menu">
@@ -8,6 +11,7 @@
             <div class="bar"></div>
         </div>
     </label>
+
     <ul class="menu">
         <li><a href="/">Inicio</a></li>
         <li><a href="/#Producto">Productos</a></li>
@@ -15,5 +19,9 @@
         <li><a href="/#contacto">Contacto</a></li>
         <li><a href="/clientes">Clientes</a></li>
     </ul>
-    <a href="/auth" class="nav-login-btn">Iniciar Sesión</a>
+
+    {isLoggedIn
+        ? <a href="/api/auth/logout" class="nav-auth-btn nav-logout-btn">Cerrar Sesión</a>
+        : <a href="/auth" class="nav-auth-btn nav-login-btn">Iniciar Sesión</a>
+    }
 </nav>
