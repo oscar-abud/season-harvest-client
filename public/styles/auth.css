@@ -18,7 +18,7 @@
     0 4px 16px rgba(0, 0, 0, 0.06);
   padding: 2.5rem 2.25rem 2rem;
   width: 100%;
-  max-width: 430px;
+  max-width: 500px;
   border-top: 4px solid var(--green-color);
   animation: auth-fade-in 0.35s ease;
 }

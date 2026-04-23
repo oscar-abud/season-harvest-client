@@ -7,20 +7,10 @@ interface Props {
 
 const { showImg = true } = Astro.props;
 ---
-<div class="container">
-  <Nav />
-  
-</div>
+<Nav />
 
 <header id="header">
   {showImg && (
     <img class="logo" src="/images/logo.png" alt="Logo" />
   )}
 </header>
-
-<style scoped>
-  .container{
-    display: flex;
-    position: relative;
-  }
-</style>
