@@ -4,12 +4,29 @@ type Mode = 'login' | 'register';
 
 interface FormState {
   name: string;
+  lastname: string;
   email: string;
+  birthdate: string;
+  phone: string;
   password: string;
   confirmPassword: string;
 }
 
-const INITIAL_FORM: FormState = { name: '', email: '', password: '', confirmPassword: '' };
+const INITIAL_FORM: FormState = {
+  name: '',
+  lastname: '',
+  email: '',
+  birthdate: '',
+  phone: '',
+  password: '',
+  confirmPassword: '',
+};
+
+function getMaxBirthdate(): string {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - 18);
+  return d.toISOString().split('T')[0];
+}
 
 export default function AuthForm() {
   const [mode, setMode] = useState<Mode>('login');
@@ -30,14 +47,23 @@ export default function AuthForm() {
     setForm(INITIAL_FORM);
   }
 
+  function validateRegister(): string | null {
+    if (form.password !== form.confirmPassword) return 'Las contraseñas no coinciden.';
+    if (form.phone && !/^[0-9]{9}$/.test(form.phone))
+      return 'El teléfono debe tener exactamente 9 dígitos (ej: 912345678).';
+    if (form.birthdate && form.birthdate > getMaxBirthdate())
+      return 'Debes tener al menos 18 años para registrarte.';
+    return null;
+  }
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
     setSuccess(null);
 
-    if (mode === 'register' && form.password !== form.confirmPassword) {
-      setError('Las contraseñas no coinciden.');
-      return;
+    if (mode === 'register') {
+      const validationError = validateRegister();
+      if (validationError) { setError(validationError); return; }
     }
 
     setLoading(true);
@@ -47,7 +73,14 @@ export default function AuthForm() {
       const body =
         mode === 'login'
           ? { email: form.email, password: form.password }
-          : { name: form.name, email: form.email, password: form.password };
+          : {
+              name: form.name,
+              lastname: form.lastname,
+              email: form.email,
+              password: form.password,
+              birthdate: form.birthdate,
+              ...(form.phone ? { phone: form.phone } : {}),
+            };
 
       const res = await fetch(endpoint, {
         method: 'POST',
@@ -62,15 +95,14 @@ export default function AuthForm() {
         return;
       }
 
-      if (mode === 'login') {
-        setSuccess('¡Sesión iniciada! Redirigiendo...');
-        setTimeout(() => {
-          window.location.href = data.redirect ?? '/clientes';
-        }, 900);
-      } else {
-        setSuccess('¡Cuenta creada exitosamente! Ya puedes iniciar sesión.');
-        setTimeout(() => switchMode('login'), 2000);
-      }
+      setSuccess(
+        mode === 'login'
+          ? '¡Sesión iniciada! Redirigiendo...'
+          : '¡Cuenta creada! Iniciando sesión...'
+      );
+      setTimeout(() => {
+        window.location.href = data.redirect ?? '/clientes';
+      }, 900);
     } catch {
       setError('Error de conexión. Verifica tu internet e intenta nuevamente.');
     } finally {
@@ -79,6 +111,7 @@ export default function AuthForm() {
   }
 
   const isLogin = mode === 'login';
+  const maxDate = getMaxBirthdate();
 
   return (
     <div className="auth-wrapper">
@@ -116,22 +149,42 @@ export default function AuthForm() {
         {/* Form */}
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
           {!isLogin && (
-            <div className="auth-field">
-              <label htmlFor="name">Nombre completo</label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                placeholder="Tu nombre completo"
-                value={form.name}
-                onChange={handleChange}
-                required
-                autoComplete="name"
-                disabled={loading}
-              />
-            </div>
+            <>
+              {/* Nombre y Apellido */}
+              <div className="auth-form-row">
+                <div className="auth-field">
+                  <label htmlFor="name">Nombre</label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="Tu nombre"
+                    value={form.name}
+                    onChange={handleChange}
+                    required
+                    autoComplete="given-name"
+                    disabled={loading}
+                  />
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="lastname">Apellido</label>
+                  <input
+                    id="lastname"
+                    name="lastname"
+                    type="text"
+                    placeholder="Tu apellido"
+                    value={form.lastname}
+                    onChange={handleChange}
+                    required
+                    autoComplete="family-name"
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+            </>
           )}
 
+          {/* Email */}
           <div className="auth-field">
             <label htmlFor="email">Correo electrónico</label>
             <input
@@ -147,6 +200,42 @@ export default function AuthForm() {
             />
           </div>
 
+          {!isLogin && (
+            <>
+              {/* Fecha nacimiento y Teléfono */}
+              <div className="auth-form-row">
+                <div className="auth-field">
+                  <label htmlFor="birthdate">Fecha de nacimiento</label>
+                  <input
+                    id="birthdate"
+                    name="birthdate"
+                    type="date"
+                    max={maxDate}
+                    value={form.birthdate}
+                    onChange={handleChange}
+                    required
+                    disabled={loading}
+                  />
+                </div>
+                <div className="auth-field">
+                  <label htmlFor="phone">Teléfono <span className="auth-optional">(opcional)</span></label>
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    placeholder="912345678"
+                    maxLength={9}
+                    value={form.phone}
+                    onChange={handleChange}
+                    autoComplete="tel"
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Contraseña */}
           <div className="auth-field">
             <label htmlFor="password">Contraseña</label>
             <input

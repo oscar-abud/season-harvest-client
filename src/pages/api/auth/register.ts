@@ -1,25 +1,27 @@
 import type { APIRoute } from 'astro';
-import { CONST_ENDPOINT_USUARIOS } from '../../../services/constats';
+import { CONST_ENDPOINT_CLIENTES_REGISTER } from '@/services/constats';
 
-// TODO: Confirmar los sub-paths del endpoint con el usuario
-// Actualmente asume: POST /api/usuario/register → crea el usuario
-const API_URL = import.meta.env.API_URL;
+// const API_URL = import.meta.env.API_URL;
+const API_URL = 'http://localhost:8080';
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   try {
-    const { name, email, password } = await request.json();
+    const { name, lastname, email, password, birthdate, phone } = await request.json();
 
-    if (!name || !email || !password) {
+    if (!name || !lastname || !email || !password || !birthdate) {
       return Response.json(
-        { message: 'Todos los campos son requeridos.' },
+        { message: 'Nombre, apellido, correo, contraseña y fecha de nacimiento son requeridos.' },
         { status: 400 }
       );
     }
 
-    const res = await fetch(`${API_URL}/${CONST_ENDPOINT_USUARIOS}/register`, {
+    const body: Record<string, unknown> = { name, lastname, email, password, birthdate };
+    if (phone) body.phone = Number(phone);
+
+    const res = await fetch(`${API_URL}/${CONST_ENDPOINT_CLIENTES_REGISTER}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify(body),
     });
 
     const data = await res.json();
@@ -31,7 +33,16 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    return Response.json({ success: true }, { status: 201 });
+    // El backend devuelve token en el registro → auto-login
+    cookies.set('auth_token', data.token, {
+      path: '/',
+      httpOnly: true,
+      secure: import.meta.env.PROD,
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    return Response.json({ success: true, redirect: '/clientes' }, { status: 201 });
   } catch {
     return Response.json(
       { message: 'Error interno del servidor.' },

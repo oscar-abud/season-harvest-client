@@ -123,6 +123,20 @@
   gap: 1rem;
 }
 
+.auth-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.auth-optional {
+  font-weight: 400;
+  font-size: 0.65rem;
+  color: #aaa;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 .auth-field {
   display: flex;
   flex-direction: column;
@@ -162,6 +176,10 @@
 
 .auth-field input::placeholder {
   color: #c0c0c0;
+}
+
+.auth-field input[type="date"] {
+  color-scheme: light;
 }
 
 /* ---- Alerts ---- */
@@ -305,5 +323,9 @@
   .auth-logo {
     width: 64px;
     height: 64px;
+  }
+
+  .auth-form-row {
+    grid-template-columns: 1fr;
   }
 }

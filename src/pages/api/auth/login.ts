@@ -1,8 +1,6 @@
 import type { APIRoute } from 'astro';
 import { CONST_ENDPOINT_CLIENTES_LOGIN } from '@/services/constats';
 
-// TODO: Confirmar los sub-paths del endpoint con el usuario
-// Actualmente asume: POST /api/usuario/login → devuelve { token: string }
 // const API_URL = import.meta.env.API_URL;
 const API_URL = 'http://localhost:8080';
 
